@@ -1,0 +1,348 @@
+# module for use with japanese_quiz_generator; classes Quiz and Word initialized, vocabulary sets established (plus a few extras).
+# new vocabulary sets can be easily added. Instructions for that at the end of 'word_sets.py' (current file).
+
+engparsing_list = []
+japarsing_list = []
+
+extra = 0
+
+class Word:
+	def __init__(word, english, romaji, kana, kanji, engparsing, japarsing):
+		global engparsing_list
+		word.english = english
+		word.romaji = romaji
+		word.kana = kana
+		word.kanji = kanji
+		if kanji == None:
+			word.kanji = kana
+		if engparsing == None:
+			word.engparsing = english
+		else:
+			word.engparsing = engparsing
+			engparsing_list.append(engparsing)
+			if "(alt)" in english:
+				engparsing_list.append(english.replace("(alt)", "alt"))
+				engparsing_list.append(english.replace("(alt)", ""))
+			word.engparsing = engparsing_list
+		if japarsing == None:
+			word.japarsing = romaji
+		else:
+			word.japarsing = japarsing
+			japarsing_list.append(japarsing)
+			word.japarsing = japarsing_list
+			
+class Quiz:
+	def __init__(quiz, qn, wl, extra):
+		quiz.qn = qn
+		quiz.wl = ['w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'w8', 'w9', 'w10']
+		if extra > 0:
+			for i in range(extra):
+				quiz.wl.append(('w' + '1' + str(extra)))
+
+q11 = Quiz(1.1, [], 1)
+q11.wl[0] = Word("I", "watashi", "わたし", "私", None, None)
+q11.wl[1] = Word("you", "anata", "あなた", "貴方", None, None)
+q11.wl[2] = Word("she", "kanojo", "かのじょ", "彼女", None, None)
+q11.wl[3] = Word("he", "kare", "かれ", "彼", None, None)
+q11.wl[4] = Word("teacher", "sensei", "せんせい", "先生", None, None)
+q11.wl[5] = Word("student", "seito", "せいと", "生徒", None, None)
+q11.wl[6] = Word("desk", "tsukue", "つくえ", "机", None, None)
+q11.wl[7] = Word("pencil", "enpitsu", "えんぴつ", "鉛筆", None, None)
+q11.wl[8] = Word("paper", "kami", "かみ", "紙", None, None)
+q11.wl[9] = Word("book", "hon", "ほん", "本", None, None)
+q11.wl[10] = Word("student (alt)", "gakusei", "がくせい", "学生", "student", None)
+
+q12 = Quiz(1.2, [], 1)
+q12.wl[0] = Word("classroom", "kyōshitsu", "きょうしつ", None, "class room", "kyoushitsu")
+q12.wl[1] = Word("class (people)", "kurasu", "クラス", None, "class people", None)
+q12.wl[2] = Word("homework", "shukudai", "しゅくだい", None, None, None)
+q12.wl[3] = Word("Japanese", "nihongo", "にほんご", "日本語", None, None)
+q12.wl[4] = Word("English", "eigo", "えいご", None, None, None)
+q12.wl[5] = Word("this", "kore", "これ", None, None, None)
+q12.wl[6] = Word("that", "sore", "それ", None, None, None)
+q12.wl[7] = Word("that (over there)", "are", "あれ", None, "that over there", None)
+q12.wl[8] = Word("which", "dore", "どれ", None, None, None)
+q12.wl[9] = Word("what", "nan", "なん", "何", "what (alt)", None)
+q12.wl[10] = Word("what (alt)", "nani", "なに", "何", "what", None)
+
+q13 = Quiz(1.3, [], 0)
+q13.wl[0] = Word("family", "kazoku", "かぞく", None, None, None)
+q13.wl[1] = Word("father", "otōsan", "おとうさん", None, None, "otousan")
+q13.wl[2] = Word("mother", "okaasan", "おかあさん", None, None, "okāsan")
+q13.wl[3] = Word("older sister", "oneesan", "おねえさん", None, None, "onēsan")
+q13.wl[4] = Word("older brother", "oniisan", "おにいさん", None, None, "onīsan")
+q13.wl[5] = Word("younger sister", "imōto", "いもうと", None, None, "imouto")
+q13.wl[6] = Word("younger brother", "otōto", "おとうと", None, None, "otouto")
+q13.wl[7] = Word("grandma", "obaasan", "おばあさん", None, None, "obāsan")
+q13.wl[8] = Word("grandpa", "ojiisan", "おじいさん", None, None, "ojīsan")
+q13.wl[9] = Word("sister", "shimai", "しまい", None, None, None)
+
+q14 = Quiz(1.4, [], 0)
+q14.wl[0] = Word("we", "watashitachi", "わたしたち", "私たち", None, None)
+q14.wl[1] = Word("you (plural)", "anatatachi", "あなたたち", "貴方たち", "you plural", None)
+q14.wl[2] = Word("they (female)", "kanojotachi", "かのじょたち", "彼女たち", "they female", None)
+q14.wl[3] = Word("they (mixed)", "karera", "かれら", "彼ら", "they mixed", None)
+q14.wl[4] = Word("who", "dare", "だれ", None, None, None)
+q14.wl[5] = Word("chair", "isu", "いす", None, None, None)
+q14.wl[6] = Word("newspaper", "shinbun", "しんぶん", None, None, None)
+q14.wl[7] = Word("apartments", "danchi", "だんち", None, None, None)
+q14.wl[8] = Word("phone (number)", "denwa (bango)", "でんわ (ばんご)", None, "phone number", "denwa bango")
+q14.wl[9] = Word("bicycle", "jitensha", "じてんしゃ", None, None, None)
+
+q15 = Quiz(1.5, [], 0)
+q15.wl[0] = Word("I (plain form)", "boku", "ぼく", None, ["i plain form", "i (pf)", "i pf"], None)
+q15.wl[1] = Word("hobby", "shumi", "しゅみ", None, None, None)
+q15.wl[2] = Word("yes", "hai", "はい", None, None, None)
+q15.wl[3] = Word("no", "iie", "いいえ", None, None, None)
+q15.wl[4] = Word("yen", "en", "えん", None, None, None)
+q15.wl[5] = Word("this (noun)", "kono", "この", None, "this noun", None)
+q15.wl[6] = Word("that (noun)", "sono", "その", None, "that noun", None)
+q15.wl[7] = Word("that (over there; noun)", "ano", "あの", None, "that over there noun", None)
+q15.wl[8] = Word("which (noun)", "dono", "どの", None, "which noun", None)
+q15.wl[9] = Word("you (familiar)", "kimi", "きみ", None, "you familiar", None)
+
+q16 = Quiz(1.6, [], 0)
+q16.wl[0] = Word("name", "namae", "なまえ", "名前", None, None)
+q16.wl[1] = Word("aunt", "obasan", "おばさん", None, None, None)
+q16.wl[2] = Word("uncle", "ojisan", "おじさん", None, None, None)
+q16.wl[3] = Word("cousin", "itoko", "いとこ", None, None, None)
+q16.wl[4] = Word("Mr./Mrs.", "san", "さん", None, ["mr mrs", "Mr Mrs", "mr/mrs", "Mr/Mrs"], None)
+q16.wl[5] = Word("daughter", "musume", "むすめ", None, None, None)
+q16.wl[6] = Word("son", "musuko", "むすこ", None, None, None)
+q16.wl[7] = Word("husband", "otto", "おっと", None, None, None)
+q16.wl[8] = Word("wife", "tsuma", "つま", None, None, None)
+q16.wl[9] = Word("brother", "kyōdai", "きょうだい", None, None, "kyoudai")
+
+q21 = Quiz(2.1, [], 0)
+q21.wl[0] = Word("car", "kuruma", "くるま", None, None, None)
+q21.wl[1] = Word("train", "densha", "でんしゃ", None, None, None)
+q21.wl[2] = Word("train station", "eki", "えき", None, None, None)
+q21.wl[3] = Word("bus", "basu", "バス", None, None, None)
+q21.wl[4] = Word("airplane", "hikōki", "ひこうき", None, None, "hikouki")
+q21.wl[5] = Word("airport", "kūkō", "くうこう", None, None, "kuukou")
+q21.wl[6] = Word("store", "mise", "みせ", None, None, None)
+q21.wl[7] = Word("money", "okane", "おかね", None, None, None)
+q21.wl[8] = Word("animal", "dōbutsu", "どうぶつ", None, None, "doubutsu")
+q21.wl[9] = Word("to want", "hoshii", "ほしい", None, "want", "hoshī")
+
+q22 = Quiz(2.2, [], 0)
+q22.wl[0] = Word("delicious", "oishii", "おいしい", None, None, "oishī")
+q22.wl[1] = Word("food", "tabemono", "たべもの", "食べ物", None, None)
+q22.wl[2] = Word("rice", "gohan", "ごはん", None, None, None)
+q22.wl[3] = Word("breakfast", "asagohan", "あさごはん", None, None, None)
+q22.wl[4] = Word("lunch", "hirugohan", "びるごはん", None, None, None)
+q22.wl[5] = Word("dinner", "bangohan", "ばんごはん", None, None, None)
+q22.wl[6] = Word("eat", "taberu", "たべる", "食べる", "to eat", None)
+q22.wl[7] = Word("walk", "aruku", "あるく", None, "to walk", None)
+q22.wl[8] = Word("speak", "hanasu", "はなす", "話す", "to speak", None)
+q22.wl[9] = Word("to drink", "nomu", "のむ", None, "drink", None)
+
+q23 = Quiz(2.3, [], 0)
+q23.wl[0] = Word("go", "iku", "いく", None, None, None)
+q23.wl[1] = Word("come", "kuru", "くる", None, None, None)
+q23.wl[2] = Word("understand", "wakaru", "わかる", None, None, None)
+q23.wl[3] = Word("know", "shiru", "しる", None, None, None)
+q23.wl[4] = Word("practice", "renshū suru", "れんしゅう する", None, None, "renshuu suru")
+q23.wl[5] = Word("study", "benkyō suru", "べんきょう する", "勉強 する", None, "benkyou suru")
+q23.wl[6] = Word("run", "hashiru", "はしる", None, None, None)
+q23.wl[7] = Word("read", "yomu", "よむ", "読む", None, None)
+q23.wl[8] = Word("sleep", "neru", "ねる", None, None, None)
+q23.wl[9] = Word("play", "asobu", "あそぶ", None, None, None)
+
+q24 = Quiz(2.4, [], 1)
+q24.wl[0] = Word("to do", "suru", "する", None, None, None)
+q24.wl[1] = Word("to stand", "tatsu", "たつ", None, "stand", None)
+q24.wl[2] = Word("to return", "kaeru", "かえる", None, "return", None)
+q24.wl[3] = Word("here", "koko", "ここ", None, None, None)
+q24.wl[4] = Word("there", "soko", "そこ", None, None, None)
+q24.wl[5] = Word("over there", "asoko", "あそこ", None, None, None)
+q24.wl[6] = Word("where", "doko", "どこ", None, None, None)
+q24.wl[7] = Word("when", "itsu", "いつ", None, None, None)
+q24.wl[8] = Word("how", "nande", "なんで", None, None, None)
+q24.wl[9] = Word("why", "naze", "なぜ", None, None, None)
+q24.wl[10] = Word("why (alt)", "doshite", "どして", None, "why", None)
+
+q25 = Quiz(2.5, [], 0)
+q25.wl[0] = Word("to think", "kangaeru", "かんがえる", None, "think", None)
+q25.wl[1] = Word("to hear/listen", "kiku", "きく", None, ["hear", "listen"], None)
+q25.wl[2] = Word("to see/watch/look", "miru", "みる", None, ["see", "watch", "look"], None)
+q25.wl[3] = Word("to climb", "noboru", "のぼる", None, "climb", None)
+q25.wl[4] = Word("to wait", "matsu", "まつ", None, "wait", None)
+q25.wl[5] = Word("to sit", "suwaru", "すわる", None, "sit", None)
+q25.wl[6] = Word("to write", "kaku", "かく", "書く", "write", None)
+q25.wl[7] = Word("to teach", "oshieru", "おしえる", None, "teach", None)
+q25.wl[8] = Word("to work", "hataraku", "はたらく", None, "work", None)
+q25.wl[9] = Word("can do", "dekiru", "できる", None, None, None)
+
+q26 = Quiz(2.6, [], 0)
+q26.wl[0] = Word("child(ren)", "kodomo(tachi)", "こども(たち)", None, ["children", "child ren"], ["kodomotachi", "kodomo tachi"])
+q26.wl[1] = Word("person", "hito", "ひと", "人", None, None)
+q26.wl[2] = Word("people", "hitobito", "ひとびと", "人々", None, None)
+q26.wl[3] = Word("male (boy)", "otoko (noko)", "おとこ (のこ)", None, "male boy", ["otoko noko", "otokonoko"])
+q26.wl[4] = Word("female (girl)", "on'na (noko)", "おんな (のこ)", None, "female girl", ["onna noko", "onnanoko", "on'na noko", "on'nanoko"])
+q26.wl[5] = Word("friend", "tomodachi", "ともだち", None, None, None)
+q26.wl[6] = Word("everyone", "minasan", "みなさん", None, None, None)
+q26.wl[7] = Word("bank", "ginkō", "ぎんこう", None, None, "ginkou")
+q26.wl[8] = Word("school", "gakkō", "がっこう", None, None, "gakkou")
+q26.wl[9] = Word("zoo", "dōbutsuen", "どうぶつえん", None, None, "doubutsuen")
+	
+q31 = Quiz(3.1, [], 2)
+q31.wl[0] = Word("room", "heya", "べや", None, None, None)
+q31.wl[1] = Word("house", "uchi", "うち", None, None, None)
+q31.wl[2] = Word("park", "kōen", "こうえん", None, None, "kouen")
+q31.wl[3] = Word("road", "michi", "みち", None, None, None)
+q31.wl[4] = Word("post office", "yūbinkyoku", "ゆうびんきょく", None, None, "yuubinkyoku")
+q31.wl[5] = Word("movie", "eiga", "えいが", None, None, None)
+q31.wl[6] = Word("movie theater", "eigakan", "えいがかん", None, None, None)
+q31.wl[7] = Word("hospital", "byōin", "びょういん", None, None, "byouin")
+q31.wl[8] = Word("few", "sukunai", "すくない", None, None, None)
+q31.wl[9] = Word("many", "takusan", "たくさん", None, None, None)
+q31.wl[10] = Word("house (alt)", "ie", "いえ", None, ["house alt", "house"], None)
+q31.wl[11] = Word("road (alt)", "doro", "どろ", None, ["road alt", "road"], None)
+	
+q32 = Quiz(3.2, [], 1)
+q32.wl[0] = Word("minute", "fun", "ふん", None, None, None)
+q32.wl[1] = Word("minute (alt)", "pun", "ぷん", None, ["minute alt", "minute"], None)
+q32.wl[2] = Word("hour", "ji", "じ", None, None, None)
+q32.wl[3] = Word("hour of time", "jikan", "じかん", None, "hour", None)
+q32.wl[4] = Word("morning", "asa", "あさ", None, None, None)
+q32.wl[5] = Word("daytime", "hiru", "ひる", None, None, None)
+q32.wl[6] = Word("evening", "yūgata", "ゆうがた", None, None, "yuugata")
+q32.wl[7] = Word("night", "yoru", "よる", None, None, None)
+q32.wl[8] = Word("this morning", "kesa", "けさ", None, None, None)
+q32.wl[9] = Word("today", "kyō", "きょう", None, None, "kyou")
+q32.wl[10] = Word("tomorrow", "ashita", "あした", "明日", None, None)
+
+q33 = Quiz(3.3, [], 1)
+q33.wl[0] = Word("day", "hi", "ひ", "日", None, None)
+q33.wl[1] = Word("day (alt)", "nichi", "にち", None, ["day alt", "day"], None)
+q33.wl[2] = Word("yesterday", "kinō", "きのう", None, None, "kinou")
+q33.wl[3] = Word("day after tomorrow", "asatte", "あさって", None, None, None)
+q33.wl[4] = Word("Monday", "getsuyōbi", "げつようび", "月曜日", None, "getsuyoubi")
+q33.wl[5] = Word("Tuesday", "kayōbi", "かようび", "火曜日", None, "kayoubi")
+q33.wl[6] = Word("Wednesday", "suiyōbi", "すいようび", "水曜日", None, "suiyoubi")
+q33.wl[7] = Word("Thursday", "mokuyōbi", "もくようび", "木曜日", None, "mokuyoubi")
+q33.wl[8] = Word("Friday", "kinyōbi", "きんようび", "金曜日", None, "kinyoubi")
+q33.wl[9] = Word("Saturday", "doyōbi", "どようび", "土曜日", None, "doyoubi")
+q33.wl[10] = Word("Sunday", "nichiyōbi", "にちようび", "日曜日", None, "nichiyoubi")
+
+q34 = Quiz(3.4, [], 1)
+q34.wl[0] = Word("during", "aida", "あいだ", None, None, None)
+q34.wl[1] = Word("now", "ima", "いま", None, None, None)
+q34.wl[2] = Word("week", "shū", "しゅう", None, None, "shuu")
+q34.wl[3] = Word("last week", "senshū", "せんしゅう", None, None, "senshuu")
+q34.wl[4] = Word("this week", "konshū", "こんしゅう", None, None, "konshuu")
+q34.wl[5] = Word("next week", "raishū", "らいしゅう", None, None, "raishuu")
+q34.wl[6] = Word("year", "toshi", "とし", None, None, None)
+q34.wl[7] = Word("this year", "kotoshi", "ことし", None, None, None)
+q34.wl[8] = Word("last year", "kyonen", "きょねん", None, None, None)
+q34.wl[9] = Word("next year", "rainen", "らいねん", None, None, None)
+q34.wl[10] = Word("year (alt)", "nen", "ねん", None, None, None)
+
+q35 = Quiz(3.5, [], 2)
+q35.wl[0] = Word("month", "tsuki", "つき", None, None, None)
+q35.wl[1] = Word("this month", "kongetsu", "こんげつ", None, None, None)
+q35.wl[2] = Word("last month", "sengetsu", "せんげつ", None, None, None)
+q35.wl[3] = Word("next month", "raigetsu", "らいげつ", None, None, None)
+q35.wl[4] = Word("season", "kisetsu", "きせつ", None, None, None)
+q35.wl[5] = Word("summer", "natsu", "なつ", None, None, None)
+q35.wl[6] = Word("fall", "aki", "あき", None, None, None)
+q35.wl[7] = Word("winter", "fuyu", "ふゆ", None, None, None)
+q35.wl[8] = Word("spring", "haru", "はる", None, None, None)
+q35.wl[9] = Word("every~", "mai", "まい", None, None, None)
+q35.wl[10] = Word("month (alt)", "getsu", "げつ", None, "month alt", None)
+q35.wl[11] = Word("month (alt two)", "gatsu", "がつ", None, "month alt two", None)
+
+q36 = Quiz(3.6, [], 0)
+q36.wl[0] = Word("dog", "inu", "いぬ", None, None, None)
+q36.wl[1] = Word("cat", "neko", "ねこ", None, None, None)
+q36.wl[2] = Word("mouse", "nezumi", "ねずみ", None, None, None)
+q36.wl[3] = Word("snake", "hebi", "へび", None, None, None)
+q36.wl[4] = Word("chicken", "niwatori", "にわとり", None, None, None)
+q36.wl[5] = Word("horse", "uma", "うま", None, None, None)
+q36.wl[6] = Word("fish", "sakana", "さかな", None, None, None)
+q36.wl[7] = Word("cow", "ushi", "うし", None, None, None)
+q36.wl[8] = Word("cockroach", "gokiburi", "ごきぶり", None, None, None)
+q36.wl[9] = Word("mosquito", "ka", "か", None, None, None)
+
+q101 = Quiz(101, [], 0)
+q101.wl[0] = Word("good morning", "ohayō gozaimasu", "おはよう ございます", None, None, "ohayou gozaimasu")
+q101.wl[1] =  Word("good afternoon", "konnichi wa", "こんにち は", None, None, None)
+q101.wl[2] = Word("good evening", "konban wa", "こんばん は", None, None, None)
+q101.wl[3] = Word("goodbye", "sayonara", "さよなら", None, None, None)
+q101.wl[4] = Word("see you later", "ja mata", "じゃ また", None, None, None)
+q101.wl[5] = Word("nice to meet you", "hajimemashite", "はじめまして", None, None, None)
+q101.wl[6] = Word("how are you?", "ogenki desu ka", "おげんき です か", None, None, None)
+q101.wl[7] = Word("I'm fine thanks", "hai genki desu", "はい げんき です", None, None, None)
+q101.wl[8] = Word("my name is ...", "watashi no namae wa ___ desu", "わたし の なまえ は ___ です", "私 の 名前 は ___ です", ["my name is", "my name is ___"], "watashi no namae wa desu")
+q101.wl[9] = Word("what is your name?", "anata no onamae wa nan desu ka", "あなた の おなまえ は なん です か", "貴方 の お名前 は 何 です か", None, None)
+
+q104 = Quiz('phrases 4', [], 0)
+q104.wl[0] = Word("please write on the whiteboard", "shiroban de kaite kudasai", "しろばん で かいて ください", None, None, None)
+q104.wl[1] = Word("please look at your packet", "paketto o mite kudasai", "パケット を みて ください", None, None, None)
+q104.wl[2] = Word("please stand", "tatte kudasai", "たって ください", None, None, None)
+q104.wl[3] = Word("please sit", "suwatte kudasai", "すわって ください", None, None, None)
+q104.wl[4] = Word("please go get a dictionary", "jiten o torimodotte kudasai", "じてん を とりもどって ください", None, None, None)
+q104.wl[5] = Word("please put ___ away", "___ o kaeshite kudasai", "___ を かえして ください", None, None, None)
+q104.wl[6] = Word("listen carefully", "yoku kiite kudasai", "よく きいて ください", None, None, None)
+q104.wl[7] = Word("trade papers with your neighbor", "tonari to baibai shite kudasai", "となり と ばいばい して ください", None, None, None)
+q104.wl[8] = Word("put your ___ in the basket", "___ wa basuketto ni oite kudasai", "___ は バスケット に おいて ください", None, None, None)
+q104.wl[9] = Word("pass in your homework", "shukudai o watashite kudasai", "しゅくだ を 私て ください", None, None, None)
+
+q105 = Quiz(105, [], 2)
+q105.wl[0] = Word("how old are you?", "nan sai desu ka", "なん さい です か", "何 さい です か", None, None)
+q105.wl[1] = Word("how much?", "ikura desu ka", "いくら です か", None, None, None)
+q105.wl[2] = Word("how many?", "ikutsu desu ka", "いくつ です か", None, None, None)
+q105.wl[3] = Word("please speak more slowly", "motto yukkuri hanashite kudasai", "もっと ゆっくり はなして ください", None, None, None)
+q105.wl[4] = Word("don't worry", "shinpai shinai de kudasai", "しんぱい しない で ください", None, None, None)
+q105.wl[5] = Word("how many people in your family?", "kazoku wa nan nin desu ka", "かぞく は なん にん です か", "かぞく は 何 にん です か", None, None)
+q105.wl[6] = Word("please hurry", "isoide kudasai", "いそいで ください", None, None, None)
+q105.wl[7] = Word("that's too bad", "zannen desu", "ざんねん です", None, None, None)
+q105.wl[8] = Word("goodnight", "oyasumi nasai", "おやすみ なさい", None, None, None)
+q105.wl[9] = Word("I'm leaving", "itte kimasu", "いって きます", None, None, None)
+q105.wl[10] = Word("I'll be back", "itte mairimasu", "いって まいります", None, None, None)
+q105.wl[11] = Word("please hurry (alt)", "isogi nasai", "いそぎ なさい", None, None, None)
+
+qn1 = Quiz('num set 1', [], 3)
+qn1.wl[0] = Word("one", "ichi", "いち", "一", None, None)
+qn1.wl[1] = Word("two", "ni", "に", "二", None, None)
+qn1.wl[2] = Word("three", "san", "さん", "三", None, None)
+qn1.wl[3] = Word("four", "yon", "よん", "四", None, None)
+qn1.wl[4] = Word("five", "go", "ご", "五", None, None)
+qn1.wl[5] = Word("six", "roku", "ろく", "六", None, None)
+qn1.wl[6] = Word("seven", "shichi", "しち", "七", None, None)
+qn1.wl[7] = Word("eight", "hachi", "はち", "八", None, None)
+qn1.wl[8] = Word("nine", "ku", "く", "九", None, None)
+qn1.wl[9] = Word("ten", "jū", "じゅう", "十", None, "juu")
+qn1.wl[10] = Word("four (alt)", "shi", "し", None, "four alt", None)
+qn1.wl[11] = Word("seven (alt)", "nana", "なな", None, "seven alt", None)
+qn1.wl[12] = Word("nine (alt)", "kyū", "きゅう", None, ["9", "nine", "nine alt"], "kyuu")
+
+# Instructions for making new vocabulary sets:
+#
+# q{1} = Quiz({2}, [], {3})
+#
+# 1 - vocabulary set number as an integer. For instance, the third tango set from unit 2 would be 2.3, so it'd be q23.
+# 2 - vocabulary set number as a decimal, or whatever you want it to be called*. Previous example would just be 2.3.
+# 3 - how many extra vocabulary words there should be. A standard set has ten words, so if there are twelve words, put 2.
+#
+# q{1}.wl[{4}] = Word("{5}", "{6}", "{7}", "{8}", {9}, {10})
+#
+# 4 - the word's number in the set. Note: start from 0, so the first word is 0, second is 1, etc. This is the standard in
+# a lot of programming stuff, it won't work correctly if it's not done this way.
+# 5 - the word's english translation.
+# 6 - the word in romaji.
+# 7 - the word in kana.
+# 8 - the word in kanji (if there is kanji/you want to specify it. If not, just write None, without the quotes.
+# 9 - specified accepted alternates for english translation (for using the program's quizzing). Optional.
+# 10 - specified accepted alternatives for japanese translation (for using the program's quizzing). Optional.
+#
+# Extra notes:
+# -if #2 isn't a number (including decimals), it should be enclosed in quotes.*
+# -anything inputted in #5-10 should be enclosed in quotes. "" Single quotes do work, but I prefer double
+# (especially with phrases sets and such, that sometimes include single quotes).
+# 8-10 are optional - if not specified, in that space should be None, capitalized and without any quotes.
+# -#9 and #10 are parsing options, and can be enclosed in square brackets - [] - to make a list of
+# possible options. Capitalization is already neutralized in the quizzing, so don't worry about that if you
+# specify manual parsing.
+# -Reference examples farther up in the file if things aren't working.
