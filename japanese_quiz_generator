@@ -7,11 +7,37 @@
 
 import random
 import word_sets
+import jqg_config
+
+jqg_version = 'v1'
+
+print("japanese_quiz_generator {0}\n".format(jqg_version))
+print("word_sets {0}\n".format(word_sets.version))
+
+times_run = 0
+
+
+def find_mistakes(word, answer):
+    mistakes = []
+    
+    for ch in range(len(answer)):
+        if answer[ch] == word[ch]:
+            pass
+        else:
+            mistakes.append(answer[ch])
+    
+    return mistakes
+
 
 def main():
-    print("japanese_quiz_generator v1\n")
-    description = input("Display program description and instructions? Input y for yes: ")
-    if description == 'y':
+    global times_run
+
+    if jqg_config.description_default == False:
+        description = input("Display program description and instructions? Input y for yes (default no): ")
+    else:
+        description = input("Display program description and instructions? Input n for no (default yes): ")
+
+    if (jqg_config.description_default == False and description == 'y') or (jqg_config.description_default == True and description != 'n'):
         print('''\n-Program for generating a quiz from a set of vocabulary words. Half of the quiz will be japanese to english,
 and the other half english to japanese.
 -Sets of vocabulary words are stored in word_sets.py. Instructions for making more of those are at the end of
@@ -33,13 +59,37 @@ default is false, and Japanese display default is romaji.
         pass
 
     tango_num = input("Tango number: ")
-    if tango_num == '':
-        print("(input not recognized; doing random.)")
-        tango_num = random.choice([1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6])
-        tango_num = float(tango_num)
-        tango_nums = [tango_num, eval(str(tango_num).replace('.', ''))]
+    
+    '''history = open("history.txt", 'a')
+    history.write(tango_num)
+    history.close()
+    
+    history = open("history.txt", 'r')
+    history_lines = history.readlines()
+    history.close()
+    
+    if times_run > 1:
+    	last_input = history_lines[-2]
     else:
-        if '.' in tango_num:
+    	last_input = history_lines[-1]'''
+    
+    rand_words = False
+    
+    if tango_num == "":
+        if (times_run == 0 or last_input == ""):
+            print("(input not recognized; doing random.)")
+            tango_num = random.choice(word_sets.tango_set_list)
+            tango_num = float(tango_num)
+            tango_nums = [tango_num, eval(str(tango_num).replace('.', ''))]
+        else:
+            print("(input not recognized; doing previous list.)") # not working
+            tango_num = last_input
+            tango_nums = [tango_num, eval(str(tango_num).replace('.', ''))]
+    else:
+        if tango_num == "r":
+            tango_nums = [tango_num, tango_num]
+            rand_words = True
+        elif '.' in tango_num:
             tango_num = float(tango_num)
             tango_nums = [tango_num, eval(str(tango_num).replace('.', ''))]
         elif tango_num.isdigit():
@@ -56,39 +106,45 @@ default is false, and Japanese display default is romaji.
             print("Input registered as string.")
             tango_nums = [tango_num, tango_num]
 
-    take_quiz = input("Take quiz? 'y' for yes: ")
-    if take_quiz == "y":
+    if jqg_config.quiz_default == False:
+        take_quiz = input("Take quiz? y for yes (default no): ")
+    else:
+        take_quiz = input("Take quiz? n for no (default yes): ")
+    
+    if (jqg_config.quiz_default == False and take_quiz == "y") or (jqg_config.quiz_default == True and take_quiz != "n"):
         take_quiz = True
     else:
-        print("Defaulting to false.")
         take_quiz = False
 
-    japanese_display = input("Display Japanese translations in romaji, kana, or kanji? (if no kanji specified, will display kana): ")
+    japanese_display = input("Display Japanese translations in romaji, kana, or kanji? (if no kanji specified, will display kana. Defaults to {0}): ".format(jqg_config.japanese_display_default))
     if japanese_display != 'romaji' and japanese_display != 'kana' and japanese_display != 'kanji':
-        print("No recognized input, defaulting to romaji.")
-        japanese_display = 'romaji'
+        print("No recognized input, defaulting to {0}.".format(jqg_config.japanese_display_default))
+        japanese_display = jqg_config.japanese_display_default
 
     answer = ['ph0']
     index = 0
 
-    current_quiz = eval('word_sets.q' + str(tango_nums[1])).wl
-
-    tango_list = [current_quiz]
-
-    sample = random.sample(current_quiz, len(current_quiz))
-
-    half_len = int(len(current_quiz) / 2)
+    if rand_words == False:
+        current_quiz = eval('word_sets.q' + str(tango_nums[1])).wl
+        tango_list = [current_quiz]
+        sample = random.sample(current_quiz, len(current_quiz))
+        half_len = int(len(current_quiz) / 2)
 
     i = 1
 
     for tango_print in range(len(tango_nums) - 1):
-        tango_nums[0] = eval('word_sets.q' + str(tango_nums[i])).qn
-        
-        current_quiz = eval('word_sets.q' + str(tango_nums[i])).wl
-        tango_list.append(current_quiz)
+        if rand_words == False:
+            tango_nums[0] = eval('word_sets.q' + str(tango_nums[i])).qn
+            current_quiz = eval('word_sets.q' + str(tango_nums[i])).wl
+            tango_list.append(current_quiz)
         i += 1
         
-        sample = random.sample(current_quiz, len(current_quiz))
+        if rand_words == True:
+        	sample = random.sample(word_sets.all_words, 10)
+        	half_len = 5
+        	current_quiz = sample
+        else:
+        	sample = random.sample(current_quiz, len(current_quiz))
         
         print("\nTango quiz", str(tango_nums[0]) + ":")
         for j_to_e in range(0, half_len):
@@ -100,6 +156,9 @@ default is false, and Japanese display default is romaji.
             index += 1
         
         index = 0
+        
+        correct_answer_eng = [sample[index].english.lower(), sample[index].engparsing]
+        correct_answer_ja = [sample[index].romaji.lower(), sample[index].kana, sample[index].kanji, sample[index].japarsing]
 
         if take_quiz == True:
             for test_j_to_e in range(0, half_len):
@@ -108,7 +167,7 @@ default is false, and Japanese display default is romaji.
                     if answer[index] == '' or None:
                         print("No input.")
                         print("Correct answer: ", sample[index].english)
-                    elif (answer[index] == sample[index].english.lower() or answer[index] in sample[index].engparsing):
+                    elif ((answer[index] == sample[index].english.lower()) or (answer[index] in sample[index].engparsing)):
                         print("True!")
                         print("Exact answer: ", sample[index].english)
                     else:
@@ -123,7 +182,7 @@ default is false, and Japanese display default is romaji.
                     if answer[index] == '' or None:
                         print("No input.")
                         print("Correct answer: {0}, {1}, or {2}.".format(sample[index].kanji, sample[index].kana, sample[index].romaji))
-                    elif (answer[index] == sample[index].romaji.lower() or answer[index] == sample[index].kana or answer[index] == sample[index].kanji or answer[index] in sample[index].japarsing):
+                    elif ((answer[index] == sample[index].romaji.lower()) or (answer[index] == sample[index].kana) or (answer[index] == sample[index].kanji) or (answer[index] in sample[index].japarsing)):
                         print("True!")
                         print("Exact answer: {0}, {1}, or {2}.".format(sample[index].kanji, sample[index].kana, sample[index].romaji))
                     else:
@@ -136,9 +195,12 @@ default is false, and Japanese display default is romaji.
         
         index = 0
 
+        times_run += 1
+
 main()
 
-print("\nDone.")
 done = 'ph'
 while done != "done":
-    done = input("Input 'done' to finish program. ")
+    done = input("\nInput 'done' to finish program. To continue, press enter. \n")
+    if done != "done":
+        main()
