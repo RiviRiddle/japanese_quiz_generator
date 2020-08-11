@@ -2,7 +2,7 @@
 # module for use with japanese_quiz_generator; classes Quiz and Word initialized, vocabulary sets established (plus a few extras).
 # new vocabulary sets can be easily added. Instructions for that at the end of 'word_sets.py' (current file).
 
-version = 'v2'
+ws_version = 'v2'
 
 engparsing_list = []
 japarsing_list = []
