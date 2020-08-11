@@ -1,0 +1,123 @@
+import tkinter as tk
+from tkinter import ttk
+import word_sets
+import jqg_config
+import random
+
+class jqg_GUI():
+	def __init__(self):
+		
+		self.main_window = tk.Tk()
+		
+		self.set_frame = tk.Frame(self.main_window)
+		self.quiz_frame = tk.Frame(self.main_window)
+		self.prompt_frame = tk.Frame(self.main_window)
+
+		set_num = tk.StringVar(self.main_window)
+		set_num.set(word_sets.word_sets_list[0])
+		self.entered_answer = tk.StringVar(self.quiz_frame)
+
+		#self.set_input = tk.Entry(self.main_window)
+		#self.set_dropdown = tk.OptionMenu(self.main_window, set_num, *word_sets.word_sets_list)
+		self.set_dropdown = ttk.Combobox(self.main_window, textvariable = set_num, values = word_sets.word_sets_list)
+		self.confirm_set = tk.Button(self.main_window, text = "Generate quiz", font = ("Times", 11), command = lambda: self.set_up_set(set_num.get()))
+		self.set_label = tk.Label(self.main_window, text = "Tango set: ", font = ("Times", 11))
+		self.print_field = tk.Label(self.set_frame, text = "1.\n2.\n3.\n4.\n5.\n6.\n7.\n8.\n9.\n10.", font = ("Times", 13))
+		self.test_button = tk.Button(self.main_window, text = "Test", font = ("Times", 11), command = lambda: self.test_set(self.rand_wl))
+		self.prompt_field = tk.Label(self.prompt_frame, text = "", font = ("Times", 11))
+
+		self.quiz_field = tk.Label(self.quiz_frame, text = "", font = ("Times", 13))
+		self.answer_entry = tk.Entry(self.quiz_frame, textvariable = self.entered_answer, font = ("Times", 11))
+		self.answer_button = tk.Button(self.quiz_frame, text = "Enter", font = ("Times", 11))
+
+		self.set_frame.grid(row = 1, column = 1)
+		self.quiz_frame.grid(row = 1, column = 2)
+		self.prompt_frame.grid(row = 2, column = 0, columnspan = 3)
+
+		#self.set_input.grid(row = 0, column = 1)
+		self.set_dropdown.grid(row = 0, column = 1)
+		self.confirm_set.grid(row = 0, column = 2)
+		self.set_label.grid(row = 0, column = 0)
+		self.print_field.grid(row = 2, column = 0, rowspan = 10, columnspan = 5)
+		self.test_button.grid(row = 0, column = 3)
+		self.prompt_field.grid(row = 0, column = 2)
+
+		self.quiz_field.grid(row = 2, column = 2, rowspan = 10, columnspan = 5)
+		self.answer_entry.grid(row = 13, column = 2)
+		self.answer_button.grid(row = 13, column = 4)
+
+		tk.mainloop()
+
+	def print_and_write(self, message, field = 0):
+		print(message)
+		if field == 0:
+			self.prompt_field['text'] += "\n" + message
+		else:
+			field['text'] += "\n" + message
+
+	def clear(self):
+		self.quiz_field['text'] = ""
+		self.prompt_field['text'] = ""
+
+	def set_up_set(self, set_num):
+		self.clear()
+		set_nums = [set_num, set_num.replace('.', '')]
+
+		current_set = eval('word_sets.q' + str(set_nums[1])).wl
+
+		self.rand_wl = random.sample(current_set, len(current_set))
+
+		self.print_field['text'] = ""
+		self.print_set(self.rand_wl)
+
+	def print_set(self, rand_wl, index = 0, japanese_display = jqg_config.japanese_display_default):
+		if index < (len(rand_wl) // 2):
+			self.print_and_write(str(index + 1) + ". " + eval('rand_wl[index].' + japanese_display), self.print_field)
+			self.print_set(rand_wl, index + 1)
+		elif index < len(rand_wl):
+			self.print_and_write(str(index + 1) + ". " + rand_wl[index].english, self.print_field)
+			self.print_set(rand_wl, index + 1)
+		else:
+			print("")
+
+	def check_answer(self, word, is_japanese, answer, rand_wl, index):
+		# clears previous response to answer; will probably change how this is set up later
+		self.prompt_field['text'] = ""
+
+		if is_japanese == False:
+			if word.kanji != None:
+				correct_answer = [word.romaji, word.kana, word.kanji, word.japarsing]
+				correct_message = correct_answer[0] + ", " + correct_answer[1] + ", " + correct_answer[2]
+			else:
+				correct_answer = [word.romaji, word.kana, word.japarsing]
+				correct_message = correct_answer[0] + ", " + correct_answer[1]
+		else:
+			correct_answer = [word.english, word.engparsing]
+			correct_message = str(correct_answer[0])
+
+		if answer == '' or None:
+			self.print_and_write("No input.")
+			self.print_and_write(f"Correct answer: {correct_message}")
+		elif answer in correct_answer:
+			self.print_and_write("True!")
+			self.print_and_write(f"Exact answer: {correct_message}")
+		else:
+			self.print_and_write("Nope.")
+			self.print_and_write(f"Correct answer: {correct_message}")
+
+		# moves on to next word in the testing
+		self.test_set(rand_wl, index + 1)
+
+	def test_set(self, rand_wl, index = 0, japanese_display = jqg_config.japanese_display_default):
+		#word = rand_wl[index]
+
+		if index < (len(rand_wl) // 2):
+			self.print_and_write("Translate: " + eval('rand_wl[index].' + japanese_display), self.quiz_field)
+			self.answer_button['command'] = lambda: self.check_answer(rand_wl[index], True, self.answer_entry.get(), rand_wl, index)
+			#self.check_answer(rand_wl[index], True, self.answer_entry.get())
+		elif index < len(rand_wl):
+			self.print_and_write("Translate: " + rand_wl[index].english, self.quiz_field)
+			self.answer_button['command'] = lambda: self.check_answer(rand_wl[index], False, self.answer_entry.get(), rand_wl, index)
+			#self.check_answer(rand_wl[index], False, input())
+		else:
+			print("")
