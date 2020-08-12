@@ -14,12 +14,12 @@ class jqg_GUI():
 		self.prompt_frame = tk.Frame(self.main_window)
 
 		set_num = tk.StringVar(self.main_window)
-		set_num.set(word_sets.word_sets_list[0])
+		set_num.set(word_sets.word_set_list[0])
 		self.entered_answer = tk.StringVar(self.quiz_frame)
 
 		#self.set_input = tk.Entry(self.main_window)
-		#self.set_dropdown = tk.OptionMenu(self.main_window, set_num, *word_sets.word_sets_list)
-		self.set_dropdown = ttk.Combobox(self.main_window, textvariable = set_num, values = word_sets.word_sets_list)
+		#self.set_dropdown = tk.OptionMenu(self.main_window, set_num, *word_sets.word_set_list)
+		self.set_dropdown = ttk.Combobox(self.main_window, textvariable = set_num, values = word_sets.word_set_list)
 		self.confirm_set = tk.Button(self.main_window, text = "Generate quiz", font = ("Times", 11), command = lambda: self.set_up_set(set_num.get()))
 		self.set_label = tk.Label(self.main_window, text = "Tango set: ", font = ("Times", 11))
 		self.print_field = tk.Label(self.set_frame, text = "1.\n2.\n3.\n4.\n5.\n6.\n7.\n8.\n9.\n10.", font = ("Times", 13))
