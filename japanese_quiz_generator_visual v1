@@ -34,44 +34,7 @@ in a google doc, etc., and they should show up.
 default is false, and Japanese display default is romaji.
     """
 
-def test_set(rand_wl, index = 0, japanese_display = jqg_config.japanese_display_default):
-    if index < (len(rand_wl) // 2):
-        print("Translate:", eval('rand_wl[index].' + japanese_display))
-        check_answer(rand_wl[index], True, input())
-        test_set(rand_wl, index + 1)
-    elif index < len(rand_wl):
-        print("Translate:", rand_wl[index].english)
-        check_answer(rand_wl[index], False, input())
-        test_set(rand_wl, index + 1)
-    else:
-        print("")
-
-def check_answer(word, is_japanese, answer):
-    if is_japanese == False:
-        if word.kanji != None:
-            correct_answer = [word.romaji, word.kana, word.kanji, word.japarsing]
-            correct_message = correct_answer[0] + ", " + correct_answer[1] + ", " + correct_answer[2]
-        else:
-            correct_answer = [word.romaji, word.kana, word.japarsing]
-            correct_message = correct_answer[0] + ", " + correct_answer[1]
-    else:
-        correct_answer = [word.english, word.engparsing]
-        correct_message = str(correct_answer[0])
-
-    if answer == '' or None:
-        print("No input.")
-        print(f"Correct answer: {correct_message}")
-    elif answer in correct_answer:
-        print("True!")
-        print(f"Exact answer: {correct_message}")
-    else:
-        print("Nope.")
-        print(f"Correct answer: {correct_message}")
-
-
 def main():
-    #test_set(rand_wl)
-
     gui_window = jqg_GUI()
 
 main()
