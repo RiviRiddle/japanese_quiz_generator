@@ -6,63 +6,105 @@ import random
 
 class jqg_GUI():
 	def __init__(self):
-		
 		self.main_window = tk.Tk()
-		
-		self.set_frame = tk.Frame(self.main_window)
-		self.quiz_frame = tk.Frame(self.main_window)
-		self.prompt_frame = tk.Frame(self.main_window)
+		self.main_window.wm_title("Japanese Quiz Generator")
+
+		menu_bar = tk.Menu(self.main_window)
+		self.main_window.config(menu = menu_bar)
+
+		self.set_frame = tk.LabelFrame(self.main_window)
+		self.quiz_frame = tk.LabelFrame(self.main_window)
+		self.prompt_frame = tk.LabelFrame(self.main_window)
+		self.options_frame = tk.LabelFrame(self.main_window)
 
 		set_num = tk.StringVar(self.main_window)
 		set_num.set(word_sets.word_set_list[0])
+
+		self.set_types_list = ["Unit sets", "Whole units"]
+
+		set_type = tk.StringVar(self.main_window)
+		set_type.set(self.set_types_list[0])
+
 		self.entered_answer = tk.StringVar(self.quiz_frame)
+
+		self.copyable = ""
 
 		#self.set_input = tk.Entry(self.main_window)
 		#self.set_dropdown = tk.OptionMenu(self.main_window, set_num, *word_sets.word_set_list)
 		self.set_dropdown = ttk.Combobox(self.main_window, textvariable = set_num, values = word_sets.word_set_list)
+		self.set_types_dropdown = ttk.Combobox(self.main_window, textvariable = set_type, values = self.set_types_list)
 		self.confirm_set = tk.Button(self.main_window, text = "Generate quiz", font = ("Times", 11), command = lambda: self.set_up_set(set_num.get()))
 		self.set_label = tk.Label(self.main_window, text = "Tango set: ", font = ("Times", 11))
-		self.print_field = tk.Label(self.set_frame, text = "1.\n2.\n3.\n4.\n5.\n6.\n7.\n8.\n9.\n10.", font = ("Times", 13))
 		self.test_button = tk.Button(self.main_window, text = "Test", font = ("Times", 11), command = lambda: self.test_set(self.rand_wl))
+		self.copyable_quiz = tk.Button(self.main_window, text = "Copyable quiz", font = ("Times", 11), command = lambda: self.copyable_text_window(self.copyable))
+
+		self.print_field = tk.Label(self.set_frame, text = "1.\n2.\n3.\n4.\n5.\n6.\n7.\n8.\n9.\n10.", font = ("Times", 13))
 		self.prompt_field = tk.Label(self.prompt_frame, text = "", font = ("Times", 11))
+
+		#self.set_types_dropdown.bind('<Button-1>', self.sets_to_display(set_type))
 
 		self.quiz_field = tk.Label(self.quiz_frame, text = "", font = ("Times", 13))
 		self.answer_entry = tk.Entry(self.quiz_frame, textvariable = self.entered_answer, font = ("Times", 11))
 		self.answer_button = tk.Button(self.quiz_frame, text = "Enter", font = ("Times", 11))
 
-		self.set_frame.grid(row = 1, column = 1)
-		self.quiz_frame.grid(row = 1, column = 2)
-		self.prompt_frame.grid(row = 2, column = 0, columnspan = 3)
+		self.romaji_button = tk.Button(self.options_frame, text = "Romaji", font = ("Times", 11), command = lambda: self.switch_japanese_display('romaji'))
+		self.kana_button = tk.Button(self.options_frame, text = "Kana", font = ("Times", 11), command = lambda: self.switch_japanese_display('kana'))
+		self.kanji_button = tk.Button(self.options_frame, text = "Kanji", font = ("Times", 11), command = lambda: self.switch_japanese_display('kanji'))
 
+		self.next_button = tk.Button(self.set_frame, text = "→", font = ("Times", 13), command = lambda: self.next_or_prev_set('next', set_num))
+		self.previous_button = tk.Button(self.set_frame, text = "←", font = ("Times", 13), command = lambda: self.next_or_prev_set('previous', set_num))
+
+		self.set_frame.grid(row = 1, column = 0, pady = 5, padx = (30, 10), ipadx = 50, columnspan = 3)
+		self.quiz_frame.grid(row = 1, column = 3, pady = 5, columnspan = 3, sticky = "N")
+		self.prompt_frame.grid(row = 1, column = 3, columnspan = 4)
+		self.options_frame.grid(row = 3, column = 1, columnspan = 4)
+
+		self.set_label.grid(row = 0, column = 0, padx = 5)
 		#self.set_input.grid(row = 0, column = 1)
-		self.set_dropdown.grid(row = 0, column = 1)
-		self.confirm_set.grid(row = 0, column = 2)
-		self.set_label.grid(row = 0, column = 0)
-		self.print_field.grid(row = 2, column = 0, rowspan = 10, columnspan = 5)
-		self.test_button.grid(row = 0, column = 3)
-		self.prompt_field.grid(row = 0, column = 2)
+		self.set_dropdown.grid(row = 0, column = 1, padx = 5)
+		self.set_types_dropdown.grid(row = 0, column = 2, padx = 5)
+		self.confirm_set.grid(row = 0, column = 3, padx = 5)
+		self.test_button.grid(row = 0, column = 4, padx = (10, 5), pady = 5)
+		self.copyable_quiz.grid(row = 0, column = 5, padx = (5, 10), pady = 5)
 
-		self.quiz_field.grid(row = 2, column = 2, rowspan = 10, columnspan = 5)
-		self.answer_entry.grid(row = 13, column = 2)
-		self.answer_button.grid(row = 13, column = 4)
+		self.print_field.grid(row = 2, column = 1, rowspan = 10, columnspan = 3, padx = (150, 10))
+		self.prompt_field.grid(row = 0, column = 0, sticky = "N")
+
+		self.quiz_field.grid(row = 0, column = 2, columnspan = 5)
+		self.answer_entry.grid(row = 1, column = 2, pady = 10)
+		self.answer_button.grid(row = 1, column = 4, padx = 5)
+
+		self.romaji_button.grid(row = 0, column = 2, padx = 5, pady = 10)
+		self.kana_button.grid(row = 0, column = 3, padx = 5, pady = 10)
+		self.kanji_button.grid(row = 0, column = 4, padx = 5, pady = 10)
+
+		self.next_button.grid(row = 13, column = 4, padx = 5, pady = 5)
+		self.previous_button.grid(row = 13, column = 2, padx = 5, pady = 5)
+
+		self.japanese_display = jqg_config.japanese_display_default
 
 		tk.mainloop()
 
-	def print_and_write(self, message, field = 0):
-		print(message)
-		if field == 0:
-			self.prompt_field['text'] += "\n" + message
+	# probably don't need it to print and write anymore? Do I want anything on the command line?
+	def print_and_write(self, message, field = 'default'):
+		#print(message)
+		if field == 'default':
+			self.prompt_field['text'] += message
+		elif field == self.print_field:
+			field['text'] += "\n" + message
+			self.copyable += message + "\n"
 		else:
 			field['text'] += "\n" + message
 
 	def clear(self):
 		self.quiz_field['text'] = ""
 		self.prompt_field['text'] = ""
+		self.copyable = ""
 
 	def set_up_set(self, set_num):
 		self.clear()
-		set_nums = [set_num, set_num.replace('.', '')]
 
+		set_nums = [set_num, set_num.replace('.', '')]
 		current_set = eval('word_sets.q' + str(set_nums[1])).wl
 
 		self.rand_wl = random.sample(current_set, len(current_set))
@@ -70,7 +112,9 @@ class jqg_GUI():
 		self.print_field['text'] = ""
 		self.print_set(self.rand_wl)
 
-	def print_set(self, rand_wl, index = 0, japanese_display = jqg_config.japanese_display_default):
+	def print_set(self, rand_wl, index = 0):
+		japanese_display = self.japanese_display
+
 		if index < (len(rand_wl) // 2):
 			self.print_and_write(str(index + 1) + ". " + eval('rand_wl[index].' + japanese_display), self.print_field)
 			self.print_set(rand_wl, index + 1)
@@ -79,8 +123,9 @@ class jqg_GUI():
 			self.print_set(rand_wl, index + 1)
 		else:
 			print("")
+			self.test_set(self.rand_wl)
 
-	def check_answer(self, word, is_japanese, answer, rand_wl, index):
+	def check_answer(self, event, word, is_japanese, answer, rand_wl, index):
 		# clears previous response to answer; will probably change how this is set up later
 		self.prompt_field['text'] = ""
 
@@ -97,27 +142,76 @@ class jqg_GUI():
 
 		if answer == '' or None:
 			self.print_and_write("No input.")
-			self.print_and_write(f"Correct answer: {correct_message}")
+			self.print_and_write(f"\nCorrect answer: {correct_message}")
 		elif answer in correct_answer:
 			self.print_and_write("True!")
-			self.print_and_write(f"Exact answer: {correct_message}")
+			self.print_and_write(f"\nExact answer: {correct_message}")
 		else:
 			self.print_and_write("Nope.")
-			self.print_and_write(f"Correct answer: {correct_message}")
+			self.print_and_write(f"\nCorrect answer: {correct_message}")
 
 		# moves on to next word in the testing
 		self.test_set(rand_wl, index + 1)
 
-	def test_set(self, rand_wl, index = 0, japanese_display = jqg_config.japanese_display_default):
+	def test_set(self, rand_wl, index = 0):
 		#word = rand_wl[index]
+		japanese_display = self.japanese_display
 
 		if index < (len(rand_wl) // 2):
+			self.quiz_field['text'] = ""
+			self.answer_entry.delete(0, 'end')
 			self.print_and_write("Translate: " + eval('rand_wl[index].' + japanese_display), self.quiz_field)
-			self.answer_button['command'] = lambda: self.check_answer(rand_wl[index], True, self.answer_entry.get(), rand_wl, index)
+			self.answer_button['command'] = lambda: self.check_answer('<Return>', rand_wl[index], True, self.answer_entry.get(), rand_wl, index)
+			self.main_window.bind('<Return>', lambda event: self.check_answer('<Return>', rand_wl[index], True, self.answer_entry.get(), rand_wl, index))
 			#self.check_answer(rand_wl[index], True, self.answer_entry.get())
 		elif index < len(rand_wl):
+			self.quiz_field['text'] = ""
+			self.answer_entry.delete(0, 'end')
 			self.print_and_write("Translate: " + rand_wl[index].english, self.quiz_field)
-			self.answer_button['command'] = lambda: self.check_answer(rand_wl[index], False, self.answer_entry.get(), rand_wl, index)
+			self.answer_button['command'] = lambda: self.check_answer('<Return>', rand_wl[index], False, self.answer_entry.get(), rand_wl, index)
+			self.main_window.bind('<Return>', lambda event: self.check_answer('<Return>', rand_wl[index], False, self.answer_entry.get(), rand_wl, index))
 			#self.check_answer(rand_wl[index], False, input())
 		else:
-			print("")
+			pass
+
+	def switch_japanese_display(self, type = jqg_config.japanese_display_default):
+		self.japanese_display = type
+
+	def next_or_prev_set(self, type, set_num):
+		if type == "next":
+			if float(set_num.get()) == word_sets.word_set_list[-1]: # for if it's at the last set available
+				set_num.set(word_sets.word_set_list[0])
+			elif str(set_num.get())[2] == "6": # or at the last set in a unit
+				set_num.set(format(float(set_num.get()) + 1 - 0.5, ".1f"))
+			else:
+				set_num.set(format(float(set_num.get()) + 0.1, ".1f"))
+			#self.set_up_set(set_num.get())
+		elif type == "previous":
+			if float(set_num.get()) == word_sets.word_set_list[0]: # for if it's the first set
+				set_num.set(word_sets.word_set_list[-1])
+			elif str(set_num.get())[2] == "1": # or the beginning of a set
+				set_num.set(format(float(set_num.get()) - 1, ".1f"))
+			else:
+				set_num.set(format(float(set_num.get()) - 0.1, ".1f"))
+			#self.set_up_set(set_num.get())
+
+	def copyable_text_window(self, text):
+		new_window = tk.Toplevel(self.main_window)
+		new_window.wm_title("Copyable text window")
+		
+		self.copyable_text = tk.Text(new_window, height = 13, width = 30, font = ("Times", 13))
+		self.copyable_text.insert(13.0, text)
+		self.copyable_text.configure(state = "disabled")
+		self.copyable_text.grid(row = 0, column = 0, padx = 10, pady = 10, ipadx = 10, ipady = 10)
+
+	'''def sets_to_display(self, type):
+		if type.get() == self.set_types_list[0]:
+			#return word_sets.word_set_list
+			self.set_dropdown['values'] = word_sets.word_set_list
+		elif type.get() == self.set_types_list[1]:
+			#return word_sets.units_list
+			self.set_dropdown['values'] = word_sets.units_list
+		else:
+			print("it's not working")
+			print(type.get())
+			print(type == self.set_types_list[0])'''
