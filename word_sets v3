@@ -1,13 +1,14 @@
-# word_sets v2
+# word_sets v3
 # module for use with japanese_quiz_generator; classes Quiz and Word initialized, vocabulary sets established (plus a few extras).
 # new vocabulary sets can be easily added. Instructions for that at the end of 'word_sets.py' (current file).
 
-ws_version = 'v2'
+ws_version = 'v3'
 
 engparsing_list = []
 japarsing_list = []
 
 word_set_list = []
+units_list = []
 
 extra = 0
 
@@ -131,6 +132,8 @@ q16.wl[8] = Word("wife", "tsuma", "つま", "妻", [], [])
 q16.wl[9] = Word("brother", "kyōdai", "きょうだい", "兄弟", [], [])
 word_set_list.append(1.6)
 
+units_list.append(1)
+
 q21 = Quiz(2.1, [], 0)
 q21.wl[0] = Word("car", "kuruma", "くるま", "車", [], [])
 q21.wl[1] = Word("train", "densha", "でんしゃ", "電車", [], [])
@@ -209,6 +212,8 @@ q26.wl[7] = Word("bank", "ginkō", "ぎんこう", None, [], [])
 q26.wl[8] = Word("school", "gakkō", "がっこう", None, [], [])
 q26.wl[9] = Word("zoo", "dōbutsuen", "どうぶつえん", None, [], [])
 word_set_list.append(2.6)
+
+units_list.append(2)
 	
 q31 = Quiz(3.1, [], 2)
 q31.wl[0] = Word("room", "heya", "へや", None, [], [])
@@ -295,6 +300,8 @@ q36.wl[8] = Word("cockroach", "gokiburi", "ごきぶり", None, [], [])
 q36.wl[9] = Word("mosquito", "ka", "か", None, [], [])
 word_set_list.append(3.6)
 
+units_list.append(3)
+
 q41 = Quiz(4.1, [], 0)
 q41.wl[0] = Word("big", "ōkii", "おおきい", None, "large", [])
 q41.wl[1] = Word("little", "chiisai", "ちいさい", None, "small", [])
@@ -373,6 +380,8 @@ q46.wl[7] = Word("cup of...", "~hai", "～はい", None, [], [])
 q46.wl[8] = Word("ordinal number", "~ban", "～ばん", None, [], [])
 q46.wl[9] = Word("pieces", "~ko", "～こ", None, [], [])
 word_set_list.append(4.6)
+
+units_list.append(4)
 
 q51 = Quiz(5.1, [], 0)
 q51.wl[0] = Word("fruit", "kudamono", "くだもの", None, [], [])
@@ -453,6 +462,8 @@ q56.wl[8] = Word("zebra", "shimauma", "しまうま", None, [], [])
 q56.wl[9] = Word("turtle", "kame", "かめ", None, [], [])
 word_set_list.append(5.6)
 
+units_list.append(5)
+
 q61 = Quiz(6.1, [], 0)
 q61.wl[0] = Word("up/top/above", "ue", "うえ", None, [], [])
 q61.wl[1] = Word("bottom/under", "shita", "した", None, [], [])
@@ -532,6 +543,8 @@ q66.wl[7] = Word("last", "saigo", "さいご", None, [], [])
 q66.wl[8] = Word("strong", "tsuyoi", "つよい", None, [], [])
 q66.wl[9] = Word("weak", "yowai", "よわい", None, [], [])
 word_set_list.append(6.6)
+
+units_list.append(6)
 
 q71 = Quiz(7.1, [], 1)
 q71.wl[0] = Word("hot", "atsui", "あつい", "暑い", [], [])
