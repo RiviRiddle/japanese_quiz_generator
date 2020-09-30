@@ -609,7 +609,7 @@ q81.wl[13] = Word("head", "atama", "あたま", "頭", [], [])
 q81.wl[14] = Word("throat", "nodo", "のど", "喉", [], [])
 q81.wl[15] = Word("toes", "ashi no yubi", "あしのゆび", "足の指", [], [])
 q81.wl[16] = Word("heart", "kokoro", "こころ", "心", [], [])
-tango_set_list.append(8.1)
+word_set_list.append(8.1)
 
 
 q101 = Quiz(101, [], 0)
