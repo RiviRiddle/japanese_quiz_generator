@@ -13,9 +13,9 @@ class jqg_GUI():
 		self.main_window.config(menu = menu_bar)
 
 		self.set_frame = tk.LabelFrame(self.main_window)
-		self.quiz_frame = tk.LabelFrame(self.main_window)
-		self.prompt_frame = tk.LabelFrame(self.main_window)
-		self.options_frame = tk.LabelFrame(self.main_window)
+		self.quiz_frame = tk.Frame(self.main_window)
+		self.prompt_frame = tk.Frame(self.main_window)
+		self.options_frame = tk.Frame(self.main_window)
 
 		set_num = tk.StringVar(self.main_window)
 		set_num.set(word_sets.word_set_list[0])
@@ -31,7 +31,7 @@ class jqg_GUI():
 
 		#self.set_input = tk.Entry(self.main_window)
 		#self.set_dropdown = tk.OptionMenu(self.main_window, set_num, *word_sets.word_set_list)
-		self.set_dropdown = ttk.Combobox(self.main_window, textvariable = set_num, values = word_sets.word_set_list)
+		self.set_dropdown = ttk.Combobox(self.main_window, textvariable = set_num, values = word_sets.word_set_list + ["randomized"])
 		self.set_types_dropdown = ttk.Combobox(self.main_window, textvariable = set_type, values = self.set_types_list)
 		self.confirm_set = tk.Button(self.main_window, text = "Generate quiz", font = ("Times", 11), command = lambda: self.set_up_set(set_num.get()))
 		self.set_label = tk.Label(self.main_window, text = "Tango set: ", font = ("Times", 11))
@@ -48,8 +48,8 @@ class jqg_GUI():
 		self.answer_button = tk.Button(self.quiz_frame, text = "Enter", font = ("Times", 11))
 
 		self.romaji_button = tk.Button(self.options_frame, text = "Romaji", font = ("Times", 11), command = lambda: self.switch_japanese_display('romaji'))
-		self.kana_button = tk.Button(self.options_frame, text = "Kana", font = ("Times", 11), command = lambda: self.switch_japanese_display('kana'))
-		self.kanji_button = tk.Button(self.options_frame, text = "Kanji", font = ("Times", 11), command = lambda: self.switch_japanese_display('kanji'))
+		self.kana_button = tk.Button(self.options_frame, text = "かな", font = ("Times", 11), command = lambda: self.switch_japanese_display('kana'))
+		self.kanji_button = tk.Button(self.options_frame, text = "漢字", font = ("Times", 11), command = lambda: self.switch_japanese_display('kanji'))
 
 		self.next_button = tk.Button(self.set_frame, text = "→", font = ("Times", 13), command = lambda: self.next_or_prev_set('next', set_num))
 		self.previous_button = tk.Button(self.set_frame, text = "←", font = ("Times", 13), command = lambda: self.next_or_prev_set('previous', set_num))
@@ -104,10 +104,13 @@ class jqg_GUI():
 	def set_up_set(self, set_num):
 		self.clear()
 
-		set_nums = [set_num, set_num.replace('.', '')]
-		current_set = eval('word_sets.q' + str(set_nums[1])).wl
+		if set_num == "randomized":
+			self.rand_wl = random.sample(word_sets.all_words, 20)
+		else:
+			set_nums = [set_num, set_num.replace('.', '')]
+			current_set = eval('word_sets.q' + str(set_nums[1])).wl
 
-		self.rand_wl = random.sample(current_set, len(current_set))
+			self.rand_wl = random.sample(current_set, len(current_set))
 
 		self.print_field['text'] = ""
 		self.print_set(self.rand_wl)
@@ -122,7 +125,7 @@ class jqg_GUI():
 			self.print_and_write(str(index + 1) + ". " + rand_wl[index].english, self.print_field)
 			self.print_set(rand_wl, index + 1)
 		else:
-			print("")
+			#print("")
 			self.test_set(self.rand_wl)
 
 	def check_answer(self, event, word, is_japanese, answer, rand_wl, index):
@@ -185,15 +188,15 @@ class jqg_GUI():
 				set_num.set(format(float(set_num.get()) + 1 - 0.5, ".1f"))
 			else:
 				set_num.set(format(float(set_num.get()) + 0.1, ".1f"))
-			#self.set_up_set(set_num.get())
+			self.set_up_set(set_num.get())
 		elif type == "previous":
 			if float(set_num.get()) == word_sets.word_set_list[0]: # for if it's the first set
 				set_num.set(word_sets.word_set_list[-1])
 			elif str(set_num.get())[2] == "1": # or the beginning of a set
-				set_num.set(format(float(set_num.get()) - 1, ".1f"))
+				set_num.set(format(float(set_num.get()) - 1 + 0.5, ".1f"))
 			else:
 				set_num.set(format(float(set_num.get()) - 0.1, ".1f"))
-			#self.set_up_set(set_num.get())
+			self.set_up_set(set_num.get())
 
 	def copyable_text_window(self, text):
 		new_window = tk.Toplevel(self.main_window)
@@ -203,15 +206,3 @@ class jqg_GUI():
 		self.copyable_text.insert(13.0, text)
 		self.copyable_text.configure(state = "disabled")
 		self.copyable_text.grid(row = 0, column = 0, padx = 10, pady = 10, ipadx = 10, ipady = 10)
-
-	'''def sets_to_display(self, type):
-		if type.get() == self.set_types_list[0]:
-			#return word_sets.word_set_list
-			self.set_dropdown['values'] = word_sets.word_set_list
-		elif type.get() == self.set_types_list[1]:
-			#return word_sets.units_list
-			self.set_dropdown['values'] = word_sets.units_list
-		else:
-			print("it's not working")
-			print(type.get())
-			print(type == self.set_types_list[0])'''
