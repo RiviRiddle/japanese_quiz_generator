@@ -11,7 +11,7 @@ import word_sets
 import jqg_config
 from jqg_GUI import jqg_GUI
 
-jqg_version = 'v3'
+jqg_version = 'v3' # v1 of jqg_visual
 
 print(f"japanese_quiz_generator {jqg_version}\n")
 print(f"word_sets {word_sets.ws_version}\n")
