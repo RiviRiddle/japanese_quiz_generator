@@ -1,3 +1,5 @@
+# set_generator v1.1
+
 fl_num = input("Tango number: ")
 num = fl_num.replace(".", "")
 extra = input("Extra words: ")
