@@ -4,6 +4,8 @@ import word_sets
 import jqg_config
 import random
 
+# jqg_GUI v1.２
+
 class jqg_GUI():
 	def __init__(self):
 		self.main_window = tk.Tk()
